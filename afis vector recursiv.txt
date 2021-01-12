@@ -1,0 +1,76 @@
+.data
+	v:.word 1, 2, 3, 4, 5
+	n:.word 5
+	sep:.asciiz " "
+.text
+
+afis:
+
+	subu $sp, 4
+	sw $fp, 0($sp)
+
+	add $fp, $sp, 4
+	
+	subu $sp, 4
+	sw $ra, 0($sp)
+
+	subu $sp, 4
+	sw $s0, 0($sp)
+
+	subu $sp, 4
+	sw $s1, 0($sp)
+
+	lw $s0, 0($fp)
+	lw $s1, 4($fp)
+
+	subu $sp, 4
+	sw $s2, 0($sp)
+
+	blt $s1, 0, exit
+
+	subu $s1, 1
+
+	subu $sp, 4
+	sw $s1, 0($sp)
+
+	jal afis
+
+	addi $sp, 4
+	addi $s1, 1
+
+	mul $s2, $s1, 4
+	add $s0, $s0, $s2
+
+	la $a0, 0($s0)
+	li $v0, 1
+	syscall
+
+	la $a0, sep
+	li $v0, 4
+	syscall
+	
+exit:
+	lw $s2, -20($fp)
+	lw $s1, -16($fp)
+	lw $s0, -12($fp)
+	lw $ra, -8($fp)
+	lw $fp, -4($fp)
+
+	addi $sp, 20
+
+	jr $ra
+main:
+	lw $t0, n
+	subu $sp, 4
+	sw $t0, 0($sp)
+
+	la $t0, v
+	subu $sp, 4
+	sw $t0, 0($sp)
+
+	jal afis
+
+	addi $sp, 8
+
+	li $v0, 10
+	syscall

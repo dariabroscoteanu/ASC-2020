@@ -1,0 +1,423 @@
+1. Functie ce primeste ca parametri prin stiva adresa unui vector de
+ intregi si lungimea sa n (intreg) si: daca n este impar, returneaza in
+ $v0 elementul de pe pozitia (n-1)/2, iar daca n este par, returneaza in
+ $v0 suma elementelor aflate pe pozitiile (n-2)/2 si n/2; presupunem ca
+ pozitiile sunt de la 0 la n-1 iar n>=1.
+ Functia isi va accesa parametrii cu $fp iar apelurile vor respecta conventiile
+ MIPS si C (privind cadrul de apel, $fp, registrii salvati de apelant si apelat,
+ etc.).
+
+ Program care apeleaza functia cu niste parametri fixati si afisaza mesajul (cu
+ "syscall") "mai mare" sau "mai mic" dupa cum valoarea returnata este >10 sau nu.
+
+
+==============================
+
+2. Procedura ce primeste ca parametri prin stiva adresa unui vector de
+ intregi, lungimea sa (intreg) si adresele a doua variabile intregi x,y si
+ atribuie lui x minimul componentelor vectorului iar lui y suma
+ componentelor vectorului.
+ Procedura isi va accesa parametrii cu $fp iar apelurile vor respecta
+ conventiile MIPS si C (privind cadrul de apel, $fp, registrii salvati de
+ apelant si apelat, etc.).
+
+ Program care aplica procedura cu niste parametri fixati si afisaza (cu
+ "syscall") mesajul "la fel" sau "nu la fel" dupa cum numerele plasate in
+ cele doua variabile sunt egale, respectiv diferite.
+
+
+==============================
+
+3. Functie ce primeste ca parametru prin stiva adresa unui string
+ ce contine o expresie (de 3 caractere plus un caracter nul) de forma "a+b",
+ "a*b" (unde a si b sunt caractere cifra) si returneaza prin stiva
+ un intreg reprezentand rezultatul evaluarii expresiei; numarul corespunzator
+ unui caracter cifra c este codul lui c - 48.
+
+ Functia isi va accesa parametrul cu $fp iar apelurile vor respecta
+ conventiile MIPS si C (privind cadrul de apel, $fp, registrii salvati de
+ apelant si apelat, etc.).
+
+ Program care aplica functia unui string ".asciiz" declarat cu initializare
+ si afisaza (cu "syscall") rezultatul.
+
+
+==============================
+
+4. Procedura ce primeste ca parametri prin stiva adresa unui vector de
+ intregi v si un intreg n (>=0) si genereaza in v tabla inmultirii cu n
+ liniarizata - mai exact v[0], v[1], v[2], ... vor fi respectiv
+ 0*0, 0*1, ..., 0*n, 1*0, 1*1, ..., 1*n, 2*0, 2*1, ..., 2*n, ..., n*0, n*1,
+ ..., n*n.
+
+ Procedura isi va accesa parametrii cu $fp iar apelurile vor respecta
+ conventiile MIPS si C (privind cadrul de apel, $fp, registrii salvati de
+ apelant si apelat, etc.).
+
+ Program care apeleaza procedura cu niste parametri fixati si afisaza
+ (cu "syscall") mesajul "tabla generata".
+
+ Indicatie: putem folosi algoritmul:
+
+   k=0; for(i=0;i<=n;++i)for(j=0;j<=n;++j) {v[k]=i*j; ++k;}
+
+ in loc de i,j,k putem folosi registri callee-saved.
+
+
+==============================
+
+5. Functie ce primeste ca parametru prin stiva un numar natural (word) si
+ returneaza $v0=1 sau $v0=0 dupa cum numarul respectiv este sau nu perfect
+ (adica este egal cu suma divizorilor sai, printre divizori incluzand 1 si
+ excluzand numarul insusi); de exemplu 6 este perfect (= 1 + 2 + 3).
+
+ Functia isi va accesa parametrul cu $fp iar apelurile vor respecta
+ conventiile MIPS si C (privind cadrul de apel, $fp, registrii salvati
+ de apelant si apelat, etc.).
+
+ Program care intr-un ciclu, la fiecare iteratie citeste (cu "syscall",
+ functia "read int") cate un intreg, ii aplica functia si afisaza (cu
+ "syscall", functia "print string") mesajul "perfect" sau "imperfect"
+ dupa cum valoarea returnata este 1 sau 0; ciclul se incheie la citirea
+ lui 0.
+
+
+==============================
+
+6. Procedura ce primeste ca parametri prin stiva adresa unui vector de
+ intergi si lungimea sa (intreg) si inlocuieste fiecare element al
+ vectorului cu modulul sau.
+ Procedura isi va accesa parametrii cu $fp iar apelurile vor respecta
+ conventiile MIPS si C (privind cadrul de apel, $fp, registrii salvati de
+ apelant si apelat, etc.).
+
+ Program care apeleaza procedura cu niste parametri fixati si
+ afisaza (cu "syscall") mesajul "program terminat".
+
+
+==============================
+
+7. Scrieti o functie ce primeste ca parametru prin stiva un intreg n si
+ returneaza $v0=1 sau $v0=0 dupa cum n este par sau impar.
+
+ Scrieti o procedura ce primeste ca parametri prin stiva adresa unui vector
+ de intregi si lungimea sa (intreg) si aplica functia de mai sus pentru
+ fiecare componenta a vectorului; de fiecare data, daca valoarea returnata
+ este 1, va afisa "p", iar daca valoarea returnata este 0, va afisa "i".
+
+ Functia si procedura isi vor accesa parametrii cu $fp iar apelurile vor
+ respecta conventiile MIPS si C (privind cadrul de apel, $fp, registrii
+ salvati de apelant si apelat, etc.).
+
+ Scrieti un program care apeleaza ultima procedura cu niste
+ parametri fixati.
+
+
+==============================
+
+8. Procedura ce primeste ca parametri prin stiva doua numere intregi m si
+ n si adresele a doua variabile intregi x,y si atribuie lui x catul
+ impartirii lui m la n si lui y restul impartirii lui m la n.
+ Procedura isi va accesa parametrii cu $fp iar apelurile vor respecta
+ conventiile MIPS si C (privind cadrul de apel, $fp, registrii salvati de
+ apelant si apelat, etc.).
+
+ Program care aplica procedura cu niste parametri fixati si afisaza (cu
+ "syscall") mesajul "la fel" sau "nu la fel" dupa cum numerele plasate in
+ cele doua variabile au, respectiv nu au, aceeasi paritate (indicatie: se
+ face diferenta lor, apoi AND intre rezultat si 0x1 pentru a selecta bitul
+ unitatilor).
+
+
+==============================
+
+9. Functie ce primeste ca parametri prin stiva adresa unui vector de
+ intregi si lungimea sa (intreg) si returneaza prin stiva maximul componentelor
+ sale impare (sau 0 daca vectorul nu are componente impare). Functia
+ isi va accesa parametrii cu $fp iar apelurile vor respecta conventiile MIPS si C
+ (privind cadrul de apel, $fp, registrii salvati de apelant si apelat,
+ etc.).
+
+ Program care aplica functia unui vector declarat cu initializare si
+ afisaza (cu "syscall") valoarea intreaga returnata.
+
+
+==============================
+
+10. Functie ce primeste ca parametri prin stiva adresa unui vector de
+ intregi si lungimea sa (intreg) si returneaza in $v0 numarul componentelor sale
+ pare. Functia isi va accesa parametrii cu $fp iar apelurile vor respecta
+ conventiile MIPS si C (privind cadrul de apel, $fp, registrii salvati de apelant
+ si apelat, etc.).
+
+ Program care aplica functia unui vector declarat cu initializare si
+ afisaza (cu "syscall") mesajul "superior" sau "inferior" dupa cum numarul
+ returnat este mai mare, respectiv mai mic sau egal cu 5.
+
+
+==============================
+
+11. Procedura ce primeste ca parametri prin stiva o adresa de memorie si
+ doua caractere si genereaza in memorie de la adresa respectiva un string
+ continand toate caracterele cuprinse intre primul si al doilea (inclusiv),
+ apoi un caracter nul; presupunem ca intotdeauna primul caracter este mai
+ mic decat al doilea; de exemplu daca va primi ca parametri adresa unei
+ variabile "s" (declarata in program cu ".space") si caracterele 'd', 'h',
+ va genera in "s" stringul "defgh" (terminat cu nul); procedura
+ isi va accesa parametrii cu $fp iar apelurile vor respecta conventiile
+ MIPS si C (privind cadrul de apel, $fp, registrii salvati de apelant
+ si apelat, etc.); atentie la aliniera datelor !
+
+ Program care aplica procedura respectiva cu niste parametri fixati prin
+ program si apoi afisaza (cu "syscall") stringul obtinut.
+
+
+==============================
+
+12. Functie ce primeste ca parametri prin stiva un byte b, adresa unui
+ vector de bytes v si lungimea sa n (intreg) si care intr-un ciclu pentru
+ fiecare componenta v[i] efectueaza urmatoarele: daca v[i]>7 nu face
+ nimic, altfel seteaza la 1 bitul de pe pozitia v[i] din b (indicatie:
+ pentru a seta la 1 bitul de pe pozitia v[i] din b facem OR intre b si
+ byte-ul obtinut prin shiftarea lui 0x1 la stanga cu v[i]); functia
+ returneaza in $v0 valoarea finala obtinuta din b.
+
+ Functia isi va accesa parametrii cu $fp iar apelurile vor respecta
+ conventiile MIPS si C (privind cadrul de apel, $fp, registrii salvati de
+ apelant si apelat, etc.); atentie la aliniera datelor !
+
+ Program care apeleaza functia cu niste parametri fixati iar in final
+ afisaza valoarea returnata ca pe un intreg (cu "syscall", functia
+ "print int").
+
+
+==============================
+
+13. Procedura ce primeste ca parametri prin stiva adresa unui vector de
+ intregi, lungimea sa (intreg) si adresele a doua variabile intregi x,y si
+ atribuie lui x suma componentelor mai mari ca 5, iar lui y suma componentelor
+ mai mici sau egale cu 5; daca vreunul din aceste tipuri de componente nu
+ exista (de ex. nu exista componente <= 5) suma respectiva va fi 0.
+ Procedura isi va accesa parametrii cu $fp iar apelurile vor respecta
+ conventiile MIPS si C (privind cadrul de apel, $fp, registrii salvati de
+ apelant si apelat, etc.).
+
+ Program care aplica procedura cu niste parametri fixati si afisaza
+ (cu "syscall") mesajul "egale" sau "diferite" dupa cum numerele plasate in
+ cele doua variabile sunt egale, respectiv diferite.
+
+
+==============================
+
+14. Functie ce primeste ca parametri prin stiva adresa unui string si un
+ intreg n >= 0 si returneaza in $v0 caracterul al n-lea al stringului;
+ functia isi va accesa parametrii cu $fp iar apelurile vor respecta conventiile
+ MIPS si C (privind cadrul de apel, $fp, registrii salvati de apelant si apelat,
+ etc.).
+
+ Program care aplica functia unui string ".asciiz" declarat cu initializare
+ si cu un intreg dat prin program si afisaza caracterul returnat; pentru afisare
+ programul va construi un string ce contine valoarea returnata de functie si un
+ caracter nul si va afisa acest string (functia "print string" a lui "syscall").
+
+
+==============================
+
+15. Procedura ce primeste ca parametri prin stiva adresa unui string
+ (presupus a fi terminat cu caracterul nul) si un caracter c si returneaza in $v0
+ pozitia pe care apare caracterul c in string (numarand de la 0); daca c nu apare
+ in string va returna 0xffffffff; procedura isi va accesa parametrii cu $fp iar
+ apelurile vor respecta conventiile MIPS si C (privind cadrul de apel, $fp,
+ registrii salvati de apelant si apelat, etc.); atentie la alinierea datelor !
+
+ Program care apeleaza procedura cu niste parametri dati prin program si afisaza
+ mesajul "apare" sau "nu apare" dupa cum valoarea returnata este, respectiv nu este,
+ diferita de 0xffffffff.
+
+
+==============================
+
+16. Functie care primeste ca parametru prin stiva adresa unui string
+ (presupus a fi terminat cu caracterul nul) si:
+ - daca lungimea stringului este impara returneaza in $v0 caracterul din
+ mijlocul lui si in $v1 caracterul nul;
+ - daca lungimea stringului este para, returneaza in $v0, $v1 caracterele
+ din mijlocul lui;
+ lungimea stringului inseamna numarul caracterelor sale, excluzand
+ terminatorul nul;
+ functia isi va accesa parametrul cu $fp iar apelurile vor respecta conventiile
+ MIPS si C (privind cadrul de apel, $fp, registrii salvati de apelant si apelat,
+ etc.).
+
+ Program care apeleaza functia unui string ".asciiz" declarat cu
+ initializare, apoi construieste un string ce contine caracterele returnate
+ in $v0, $v1 si un caracter nul (in total trei caractere), apoi afisaza
+ stringul obtinut (cu "syscall").
+
+
+==============================
+
+17. Functie ce primeste ca parametru un intreg si returneaza in $v0
+ numarul cifrelor sale in baza 10 (de exemplu pentru 7053 va returna 4);
+ in acest scop intr-un ciclu, cat timp numarul curent este > 0,
+ se incrementeaza totalul cu 1, se imparte numarul curent la 10, apoi catul
+ devine noul numar curent.
+ Functia isi va accesa parametrul cu $fp iar apelurile vor respecta
+ conventiile MIPS si C (privind cadrul de apel, $fp, registrii salvati de
+ apelant si apelat, etc.).
+
+ Program care apeleaza functia cu un parametru fixat si afisaza (cu "syscall")
+ mesajul "mai mare" sau "mai mic" dupa cum numarul returnat este mai mare,
+ respectiv mai mic sau egal cu 5.
+
+
+==============================
+
+18. Procedura ce primeste ca parametri prin stiva adresa unui vector de
+ intregi si lungimea sa (intreg) si decrementeaza cu 1 fiecare element impar
+ al vectorului.
+ Procedura isi va accesa parametrii cu $fp iar apelurile vor respecta conventiile
+ MIPS si C (privind cadrul de apel, $fp, registrii salvati de apelant si apelat,
+ etc.).
+
+ Program care apeleaza procedura cu niste parametri fixati si afisaza (cu
+ "syscall") mesajul "incheiat".
+
+
+==============================
+
+19. Functie ce primeste ca parametri prin stiva un byte b si doua word-uri
+ k si p si efectueaza urmatoarele:
+ - daca p=0 si 0<=k<=7, atunci returneaza in $v1 pe 0 iar in $v0
+ byte-ul obtinut din b prin atribuirea in bitul k a valorii 0;
+ - daca p=1 si 0<=k<=7, atunci returneaza in $v1 pe 0 iar in $v0
+ byte-ul obtinut din b prin atribuirea in bitul k a valorii 1;
+ - in celelalte cazuri va returna in $v1 pe -1 iar in $v0 pe b;
+ in toate cazurile $v0 se va construi din b folosind operatii logice si de
+ shiftare.
+
+ Functia isi va accesa parametrii cu $fp iar apelurile vor respecta
+ conventiile MIPS si C (privind cadrul de apel, $fp, registrii salvati de
+ apelant si apelat, etc.); atentie la alinierea datelor !
+
+ Program care intr-un ciclu citeste (cu "syscall", functia "read int") cate
+ un intreg ce incape intr-un byte (valoarea citita se incarca intr-o
+ variabila byte) si-i aplica de doua ori functia, o data pentru a-i face
+ bitul 1 egal cu 0, apoi pentru a-i face bitul 1 egal cu 1; dupa fiecare
+ apel se va afisa numarul rezultat (cu "syscall", functia "print int");
+ ciclul se termina cand tastam 0.
+
+
+==============================
+
+20. Procedura ce primeste ca parametri prin stiva adresa unei zone de
+ memorie, un intreg n si un caracter c si scrie in memorie incepand de la
+ adresa respectiva un string continand de n ori caracterul c si apoi un
+ caracter nul; procedura isi va accesa parametrii cu $fp iar apelurile vor
+ respecta conventiile MIPS si C (privind cadrul de apel, $fp, registrii salvati
+ de apelant si apelat, etc.); atentie la alinierea datelor !
+
+ Program care aplica procedura cu niste date fixate prin program, apoi
+ afisaza stringul obtinut (cu "syscall").
+
+
+==============================
+
+21. Functie ce primeste ca parametri prin stiva patru bytes (parametri
+ distincti) si returneaza in $v0 word-ul format din cei patru bytes
+ (pentru compunerea lui se vor folosi operatii logice si de shiftare).
+
+ Functia isi va accesa parametrii cu $fp iar apelurile vor respecta
+ conventiile MIPS si C (privind cadrul de apel, $fp, registrii salvati
+ de apelant si apelat, etc.); atentie la aliniera datelor !
+
+ In program se va scrie un ciclu in care functia se va aplica pentru
+ sistemele de patru componente succesive ale unui vector de bytes declarat
+ cu initializare si avand un numar de componente multiplu de patru
+ (functia se aplica componentelor de pe pozitiile 0,1,2,3, apoi 4,5,6,7,
+ etc.); valorile returnate se aduna intr-o alta variabila x. La sfarsit se
+ afisaza (cu "syscall") mesajul "nul" sau "nenul" dupa cum x este
+ in final 0 sau nu.
+
+
+==============================
+
+22. Functie ce primeste ca parametru prin stiva adresa unui string ce
+ contine 8 caractere '0' sau '1' (si la sfarsit un caracter nul)
+ si returneaza in $v0 byte-ul format din bitii 0/1 in aceeasi ordine ca si
+ careterele '0'/'1' din string; de exemplu daca stringul dat ca parametru
+ este "01000011", functia va returna $v0 = 01000011 binar = 67; byte-ul va
+ fi construit folosind operatii logice si de shiftare.
+ Functia isi va accesa parametrul cu $fp iar apelurile vor respecta
+ conventiile MIPS si C (privind cadrul de apel, $fp, registrii salvati de
+ apelant si apelat, etc.).
+
+ Program care aplica functia cu un parametru fixat
+ si afisaza byte-ul returnat, ca un intreg (cu "syscall").
+
+ Indicatie: dintr-un string s ca mai sus se poate obtine un byte b astfel:
+
+ b=0; for(i=0;i<8;++i) {b=b<<1; if(s[i]=='1')b=b | 0x01;}
+
+
+
+==============================
+
+23. Functie ce primeste ca parametru prin stiva un caracter si returneaza
+ prin stiva upcase-ul sau; upcase-ul unei litere mici este litera mare
+ corespunzatoare, iar upcase-ul unui caracter ce nu este litera mica este
+ chiar caracterul respectiv; functia isi va accesa parametrul cu $fp
+ iar apelurile vor respecta conventiile MIPS si C (privind cadrul de apel,
+ $fp, registrii salvati de apelant si apelat, etc.); atentie la alinierea datelor !
+
+ Program care contine o variabila globala ".asciiz" initializata cu un
+ string iar intr-un ciclu inlocuieste fiecare caracter al sau (pana la
+ caracterul nul exclusiv) cu upcase-ul acestuia (folosind functia) si in
+ final afisaza strimgul obtinut (cu "syscall"). De exemplu daca stringul
+ este "aB1,ce" va afisa "AB1,CE".
+
+
+==============================
+
+24. Program care citeste un intreg (cu "syscall") si afisaza (cu "syscall")
+ cel mai mare intreg ce se poate obtine din el prin rotirea bitilor in el
+ cu cate 1 la dreapta. Afisarea se va face cu o procedura ce primeste
+ intregul ca parametru prin stiva; procedura isi va accesa parametrul cu $fp
+ iar apelurile vor respecta conventiile MIPS si C (privind cadrul de apel,
+ $fp, registrii salvati de apelant si apelat, etc.).
+
+
+==============================
+
+25. Procedura ce primeste ca parametri prin stiva un word n si adresele a
+ patru variabile byte (in total cinci parametri) si pune in variabilele
+ respective octetii word-ului n; acesti octeti se vor obtine folosind
+ operatii logice si de shiftare.
+
+ Procedura isi va accesa parametrii cu $fp iar apelurile vor respecta
+ conventiile MIPS si C (privind cadrul de apel, $fp, registrii salvati de
+ apelant si apelat, etc.).
+
+ In program citim (cu "syscall", functia "read int") un intreg word, apoi
+ apelam procedura dand ca parametri word-ul respectiv si adresele primelor
+ patru componente ale unui vector de cinci bytes declarat fara initializare
+ (cu ".space"), apoi punem in a cincia componenta caracterul nul si afisam
+ stringul rezultat (cu "syscall" functia "print string").
+
+
+==============================
+
+26. Functie ce primeste ca parametru prin stiva adresa unui vector de
+ intregi nenuli terminat cu un 0 si returneaza in $v0 diferenta intre
+ primul si ultimul element nenul al lui (se presupune ca exista cel putin
+ unul).
+ Functia isi va accesa parametrul cu $fp iar apelurile vor respecta
+ conventiile MIPS si C (privind cadrul de apel, $fp, registrii salvati de
+ apelant si apelat, etc.).
+
+ Program care apeleaza functia cu un parametru fixat si afisaza (cu
+ "syscall") mesajul "nul" sau "nenul" dupa cum valoarea returnata este
+ 0 sau nu.
+
+
+==============================

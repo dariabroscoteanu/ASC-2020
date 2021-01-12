@@ -1,0 +1,85 @@
+.data
+	sir:.asciiz "sir de caractere"
+	ch:.byte 'b'
+.text
+este_vocala:
+	subu $sp, 4
+	sw $fp, 0($sp)
+
+	add $fp, $sp, 4
+
+	subu $sp, 4
+	sw $s0, 0($sp)
+
+	lw $s0, 0($fp)
+	
+	beq $s0, 97, et_vocala
+	beq $s0, 101, et_vocala
+	beq $s0, 105, et_vocala
+	beq $s0, 111, et_vocala
+	beq $s0, 117, et_vocala
+
+	li $v0, 0
+	j este_vocala_exit
+
+et_vocala:
+	li $v0,1
+este_vocala_exit:
+	lw $s0, -8($fp)	
+	lw $fp, -4($fp)
+	addi $sp, 8
+	jr $ra
+
+afis:
+	subu $sp, 4
+	sw $fp, 0($sp)
+
+	addi $fp, $sp, 4
+	
+	subu $sp, 4
+	sw $ra, 0($sp)
+
+	subu $sp, 4
+	sw $s0, 0($sp)
+	
+	lw $s0, 0($fp)
+
+for_afis:
+	lb $t0, 0($s0)
+	beqz $t0, exit_afis
+
+	subu $sp, 4
+	sw $t0, 0($sp)
+	jal este_vocala
+	addu $sp, 4
+
+	beq $v0, 1, afisez
+cont_for_afis:
+	addi $s0, 1
+	j for_afis
+afisez:
+	lb $a0, 0($s0)
+	li $v0, 11
+	syscall
+
+	j cont_for_afis
+
+exit_afis:
+	lw $s0, -12($fp)
+	lw $ra, -8($fp)
+	lw $fp, -4($fp)
+	addi $sp, 12
+	jr $ra
+
+
+main:
+	la $t0, sir
+	subu $sp, 4
+	sw $t0, 0($sp)
+
+	jal afis	
+	addi $sp, 4
+
+	
+	li $v0, 10
+	syscall

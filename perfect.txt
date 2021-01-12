@@ -1,0 +1,69 @@
+.data
+    n:.word 12
+
+.text
+perfect:
+    subu $sp, 4
+    sw $fp, 0($sp)
+    add $fp, $sp, 4
+
+    subu $sp, 4
+    sw $s0, 0($sp)
+
+    subu $sp, 4
+    sw $s1, 0($sp)
+
+    subu $sp, 4
+    sw $s2, 0($sp)
+
+    subu $sp, 4
+    sw $s3, 0($sp)
+
+    lw $s0, 0($fp)
+    li $s1, 2
+    li $s2, 1
+
+    loop:
+        beq $s1, $s0, exit_loop
+        rem $s3, $s0, $s1
+        beqz $s3, adauga
+        j for_cont
+        adauga:
+            add $s2, $s2, $s1
+        for_cont:
+            addi $s1, 1
+            j loop
+
+    exit_loop:
+        beq $s0, $s2, e_perfect
+        li $v0, 0
+        j exit
+    e_perfect:
+        li $v0,1
+    exit:
+        lw $s3, -20($fp)
+        lw $s2, -16($fp)
+        lw $s1, -12($fp)
+        lw $s0, -8($fp)
+        lw $fp, -4($fp)
+        addi $sp, 20
+
+        jr $ra
+
+
+
+main:
+    lw $t0, n
+    subu $sp, 4
+    sw $t0, 0($sp)
+    
+    jal perfect
+
+    addi $sp, 4
+
+    move $a0, $v0
+    li $v0, 1
+    syscall
+
+    li $v0, 10
+    syscall

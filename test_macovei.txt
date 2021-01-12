@@ -1,0 +1,163 @@
+#Sa se implementezeprocedura recursivasumOfDigitscare primeste ca argument un numar na-turalxsi care returneaza, prin intermediul registrului$v0, suma cifrelor numaruluix.
+#Sa se implementeze proceduradivisorscare, primind ca argumente doua numere naturalexsiy,afiseaza  toti  divizorii  produsuluix·ydoar  daca  suma  cifrelor  numaruluix·yeste  para.   #Pentruimplementare, se va face un apel imbricat dindivisorslasumOfDigits
+.data
+	x:.word 10
+	y:.word 4
+	sep:.asciiz " "
+	v:.word 2, 4, 6, 8, 10
+	n:.word 5
+	endLine:.asciiz "\n"
+.text
+
+sumOfDigits:
+	subu $sp, 4
+	sw $fp, 0($sp)
+	addi $fp, $sp, 4
+
+	subu $sp, 4
+	sw $s0, 0($sp)
+
+	subu $sp, 4
+	sw $s1, 0($sp)
+
+	subu $sp, 4
+	sw $s2, 0($sp)
+
+	lw $s0, 0($fp)
+	li $s1, 0
+	
+loop:
+	beqz $s0, exit_loop
+
+	rem $s2, $s0, 10
+	add $s1, $s1, $s2
+	div $s0, $s0, 10
+	j loop
+
+exit_loop:
+	move $v0, $s1
+	lw $s2, -16($fp)
+	lw $s1, -12($fp)
+	lw $s0, -8($fp)
+	lw $fp, -4($fp)
+
+	addi $sp, 16
+
+	jr $ra
+
+divisors:
+	subu $sp, 4
+	sw $fp, 0($sp)
+	addi $fp, $sp, 4
+
+	subu $sp, 4
+	sw $ra, 0($sp)
+
+	subu $sp, 4
+	sw $s0, 0($sp)
+
+	subu $sp, 4
+	sw $s1, 0($sp)
+
+	subu $sp, 4
+	sw $s2, 0($sp)
+
+	lw $s0, 0($fp)
+	lw $s1, 4($fp)
+
+	mul $s0, $s0, $s1
+
+
+	subu $sp, 4
+	sw $s0, 0($sp)
+	
+	jal sumOfDigits
+
+	addi $sp, 4
+
+	move $s1, $v0
+	rem $s1, $s1, 2
+
+
+	beq $s1, 0, afis_divizori
+	j exit_for
+afis_divizori:
+	li $s1, 1
+for:
+	bgt $s1, $s0, exit_for
+	rem $s2, $s0, $s1
+
+	
+	beqz $s2, afisare_numar
+	j cont_for
+afisare_numar:
+	move $a0, $s1
+	li $v0, 1
+	syscall
+
+	la $a0, sep
+	li $v0, 4
+	syscall
+
+	j cont_for
+cont_for:
+	addi $s1, 1
+	j for
+exit_for:
+	lw $s2, -20($fp)
+	lw $s1, -16($fp)
+	lw $s0, -12($fp)
+	lw $ra, -8($fp)
+	lw $fp, -4($fp)
+
+	addi $sp, 20
+
+	jr $ra
+
+
+	
+main:
+	lw $t0, n
+	la $t1, v
+
+	li $t2, 0
+	la $t5, v
+while:
+	beq $t2, $t0, exit_while
+
+	beq $t2, $t0, ultimul
+	lw $t3, 0($t1)
+	lw $t4, 4($t1)
+	
+	j procedura
+
+ultimul:
+	lw $t3, 0($t1)
+	lw $t4, 0($t5)
+	
+procedura:
+	subu $sp, 4
+	sw $t3, 0($sp)
+
+	subu $sp, 4
+	sw $t4, 0($sp)
+
+	jal divisors
+	
+
+	la $a0, endLine
+	li $v0, 4
+	syscall
+
+	addi $sp, 8
+
+	addi $t1, 4
+	addi $t2, 1
+
+	j while
+	
+	
+	 
+exit_while:
+	li $v0, 10
+	syscall

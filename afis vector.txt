@@ -1,0 +1,62 @@
+.data
+	v:.word 5, 13, 27, 3, 11, 29
+	n:.word 6
+	sep:.asciiz " " 
+.text
+afis:
+	subu $sp, 4
+	sw $fp, 0($sp)
+
+	add $fp, $sp, 4
+	
+	subu $sp, 4
+	sw $s0, 0($sp)
+
+	subu $sp, 4
+	sw $s1, 0($sp)
+
+	lw $s0, 0($fp)
+	lw $s1, 4($fp)
+
+	li $t0, 0
+	loop:
+		bge $t0, $s1, exit
+		lw $a0, 0($s0)
+		li $v0, 1
+		syscall
+
+		la $a0, sep
+		li $v0, 4
+		syscall
+
+		addi $s0, 4
+		addi $t0, 1
+	
+		j loop
+
+	exit:
+	lw $s1, -12($fp)
+	lw $s0, -8($fp)
+	lw $fp, -4($fp)
+	
+	addi $sp, 12
+
+	jr $ra
+main:
+
+	lw $t0, n
+	subu $sp, 4
+	sw $t0, 0($sp)
+
+	la $t0, v
+	subu $sp, 4
+	sw $t0, 0($sp)
+
+	jal afis
+
+	addi $sp, 8
+
+	li $v0, 10
+	syscall
+
+	

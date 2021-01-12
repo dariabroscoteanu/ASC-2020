@@ -1,0 +1,110 @@
+#5. Functie ce primeste ca parametru prin stiva un numar natural (word) si
+# returneaza $v0=1 sau $v0=0 dupa cum numarul respectiv este sau nu perfect
+ #(adica este egal cu suma divizorilor sai, printre divizori incluzand 1 si
+ #excluzand numarul insusi); de exemplu 6 este perfect (= 1 + 2 + 3).
+
+ #Functia isi va accesa parametrul cu $fp iar apelurile vor respecta
+ #conventiile MIPS si C (privind cadrul de apel, $fp, registrii salvati
+ #de apelant si apelat, etc.).
+
+ #Program care intr-un ciclu, la fiecare iteratie citeste (cu "syscall",
+ #functia "read int") cate un intreg, ii aplica functia si afisaza (cu
+ #"syscall", functia "print string") mesajul "perfect" sau "imperfect"
+ #dupa cum valoarea returnata este 1 sau 0; ciclul se incheie la citirea
+ #lui 0.
+.data
+    pf:.asciiz "perfect"
+    npf:.asciiz "imperfect"
+    sep:.asciiz " "
+.text
+perfect:
+    subu $sp, 4
+    sw $fp, 0($sp)
+    add $fp, $sp, 4
+
+    subu $sp, 4
+    sw $s0, 0($sp)
+
+    subu $sp, 4
+    sw $s1, 0($sp)
+
+    subu $sp, 4
+    sw $s2, 0($sp)
+
+    subu $sp, 4
+    sw $s3, 0($sp)
+
+    lw $s0, 0($fp)
+    li $s1, 2
+    li $s2, 1
+
+    loop:
+        beq $s1, $s0, exit_loop
+        rem $s3, $s0, $s1
+        beqz $s3, adauga
+        j for_cont
+        adauga:
+            add $s2, $s2, $s1
+        for_cont:
+            addi $s1, 1
+            j loop
+
+    exit_loop:
+        beq $s0, $s2, e_perfect
+        li $v0, 0
+        j exit
+    e_perfect:
+        li $v0,1
+    exit:
+        lw $s3, -20($fp)
+        lw $s2, -16($fp)
+        lw $s1, -12($fp)
+        lw $s0, -8($fp)
+        lw $fp, -4($fp)
+        addi $sp, 20
+
+        jr $ra
+main:
+    li $v0, 5
+    syscall
+    move $t0, $v0
+
+loop1:
+    beqz $t0, exit_loop1
+
+    subu $sp, 4
+    sw $t0, 0($sp)
+
+    jal perfect
+
+    addi $sp, 4
+
+    move $t1, $v0
+    beqz $t1, nu_e_perfect
+
+    la $a0, pf
+    li $v0, 4
+    syscall
+
+    la $a0, sep
+    li $v0, 4
+    syscall
+    j loop_cont
+nu_e_perfect:
+    la $a0, npf
+    li $v0, 4
+    syscall
+
+    la $a0, sep
+    li $v0, 4
+    syscall
+
+loop_cont:
+    li $v0, 5
+    syscall
+    move $t0, $v0
+    j loop1
+exit_loop1:
+    li $v0, 10
+    syscall
+    syscall

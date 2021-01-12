@@ -1,0 +1,102 @@
+.data
+n:.word 6
+k:.word 4
+.text
+  combinari:
+    subu $sp,4
+    sw $fp,0($sp)
+    addi $fp,$sp,4
+
+    subu $sp,4
+    sw $ra,0($sp)
+
+    subu $sp,4
+    sw $s0, 0($sp)#pt suma n+k
+    subu $sp,4
+    sw $s1, 0($sp)#pt n
+    subu $sp,4
+    sw $s2, 0($sp)#pt k
+    subu $sp,4
+    sw $s3, 0($sp)#pt a salva valoarea din v0
+
+    lw $s1,4($fp) #aici am n
+    lw $s2,0($fp) #aici am k
+
+    #daca suma lor e 0 sau 1 atunci return 0
+
+    add $s0,$s2,$s1 #aici am suma n+k
+
+    ble $s0,1,return0
+    beq $s1,$s2,return1
+    ble $s2,1,return_n
+
+    #calculez combinari de n-1 luate cate k
+
+    subu $s1,1
+
+    subu $sp,4
+    sw $s1, 0($sp)
+    subu $sp,4
+    sw $s2, 0($sp)
+    jal combinari
+
+    addi $sp,8
+    move $s3,$v0
+
+    #calculez combinari de n-1 luate cate k-1
+
+    subu $s2,1
+    
+    subu $sp,4
+    sw $s1, 0($sp)
+    subu $sp,4
+    sw $s2, 0($sp)
+    jal combinari
+
+    addi $sp,8
+    add $v0,$s3,$v0
+    j exit
+
+  return0:
+    li $v0, 0   #Return 0
+    j exit
+  return1:
+    li $v0,1
+    j exit
+  return_n:
+    move $v0,$s1
+  exit:
+    #restore stack
+    lw $s3,-24($fp)
+    lw $s2,-20($fp)
+    lw $s1,-16($fp)
+    lw $s0,-12($fp)
+    lw $ra,-8($fp)
+    lw $fp,-4($fp)
+    addi $sp,24 #golesc stiva de 6 elemente
+    jr $ra
+
+main:
+  #pun n pe stiva
+  lw $t0,n
+  subu $sp,4
+  sw $t0,0($sp)
+
+  #pun k pe stiva
+  lw $t0,k
+  subu $sp,4
+  sw $t0,0($sp)
+
+  #acum pe stiva am k,n si apelez recursia
+
+  jal combinari
+
+  addi $sp,8 #golesc stiva
+
+  move $a0,$v0
+  li $v0,1
+  syscall
+
+
+  li $v0,10
+  syscall

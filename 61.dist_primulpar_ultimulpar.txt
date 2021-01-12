@@ -1,0 +1,104 @@
+#vector
+#sa se determine distanta dintre primul si ultimul nr par din vector
+# daca nu exista numere pare, se va returna -1
+.data
+    v:.align 2
+	.word 11, 11, 11, 2, 23, 11
+    n:	.align 2
+	.word 6
+    sep:.align 2
+	.asciiz " "
+    sir1:.align 2
+	.asciiz "nu exista"
+    sir2:.align 2
+	.asciiz "exista"	
+.text
+distanta:
+    subu $sp,4
+    sw $fp, 0($sp)
+
+    addi $fp, $sp, 4
+
+    subu $sp, 4
+    sw $s0, 0($sp)
+
+    subu $sp, 4
+    sw $s1, 0($sp)
+
+    subu $sp, 4
+    sw $s2, 0($sp)
+
+    subu $sp, 4
+    sw $s3, 0($sp)
+
+    lw $s0, 4($fp)
+    lw $s1, 0($fp)
+
+    mul $s1, $s1, 4
+
+    add $s1, $s0, $s1
+sub $s1, $s1, 4
+
+loop:
+    bgt $s0, $s1, exit_loop
+    lw $s2, 0($s0)
+    rem $s2, $s2, 2
+    beqz $s2,primul_par
+    j verif
+primul_par:
+    lw $s2, 0($s1)
+    rem $s2, $s2, 2
+    beqz $s2,calcul_distanta
+    sub $s1, $s1, 4
+    j loop
+verif:
+    lw $s2, 0($s1)
+    rem $s2, $s2, 2
+    beqz $s2,ultimul_par
+ultimul_par:
+    add $s0, $s0, 4
+    j loop
+calcul_distanta:
+    
+    sub $s1,$s1, $s0
+    div $s1, $s1, 4
+    move $v0, $s1
+    j restaurare
+exit_loop:
+    li $v0, -1
+restaurare:
+    lw $s4,-24($fp)
+    lw $s3,-20($fp)
+    lw $s2,-16($fp)
+    lw $s1,-12($fp)
+    lw $s0,-8($fp)
+    lw $fp,-4($fp)
+    addi $sp, 24
+    jr $ra
+    
+main:
+   la $t0, v
+   subu $sp, 4
+   sw $t0, 0($sp)
+
+   lw $t0, n
+   subu $sp, 4
+   sw $t0, 0($sp)
+
+   jal distanta
+
+   addi $sp, 8
+
+   move $t0, $v0
+   beq $v0, -1, afis
+   la $a0, sir2
+   li $v0, 4
+   syscall
+   j exit
+afis:
+   la $a0, sir1
+   li $v0, 4
+   syscall
+exit:
+    li $v0, 10
+    syscall

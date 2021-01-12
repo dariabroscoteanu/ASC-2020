@@ -1,0 +1,126 @@
+#2. Procedura ce primeste ca parametri prin stiva adresa unui vector de
+#intregi, lungimea sa (intreg) si adresele a doua variabile intregi x,y si
+#atribuie lui x minimul componentelor vectorului iar lui y suma
+#componentelor vectorului.
+#Procedura isi va accesa parametrii cu $fp iar apelurile vor respecta
+#conventiile MIPS si C (privind cadrul de apel, $fp, registrii salvati de
+#apelant si apelat, etc.).
+
+#Program care aplica procedura cu niste parametri fixati si afisaza (cu
+#"syscall") mesajul "la fel" sau "nu la fel" dupa cum numerele plasate in
+#cele doua variabile sunt egale, respectiv diferite.
+
+.data
+    v:.align 2
+	.word 1, 3, 2, 2, 4, 1
+    n:	.align 2
+	.word 6
+    sep:.align 2
+	.asciiz " "
+    sir1:.align 2
+        .asciiz "mai mare"
+    sir2:.align 2
+        .asciiz "mai mic"
+    x:.space 20
+    y:.space 20
+.text
+procedura:
+    subu $sp,4
+    sw $fp, 0($sp)
+
+    addi $fp, $sp, 4
+
+    subu $sp, 4
+    sw $s0, 0($sp)
+
+    subu $sp, 4
+    sw $s1, 0($sp)
+
+    subu $sp, 4
+    sw $s2, 0($sp)
+
+    subu $sp, 4
+    sw $s3, 0($sp)
+
+    subu $sp, 4
+    sw $s4, 0($sp)
+
+    subu $sp, 4
+    sw $s5, 0($sp)
+
+    lw $s0, 12($fp)
+    lw $s1, 8($fp)
+    lw $s2, 0($s0)
+   
+    li $s3, 0
+
+loop:
+    beqz $s1, exit_loop
+    lw $s5, 0($s0)
+
+    add $s3, $s3, $s5
+    blt $s5, $s2, mai_mic
+    j cont
+mai_mic:
+    move $s2, $s5
+	
+cont:
+    sub $s1, $s1, 1
+    add $s0, $s0, 4
+    j loop
+
+exit_loop:
+    
+    sw $s2, x
+    sw $s3, y
+    
+    
+restaurare:
+    lw $s5,-28($fp)
+    lw $s4,-24($fp)
+    lw $s3,-20($fp)
+    lw $s2,-16($fp)
+    lw $s1,-12($fp)
+    lw $s0,-8($fp)
+    lw $fp,-4($fp)
+    addi $sp, 28
+    jr $ra
+    
+main:
+   la $t0, v
+   subu $sp, 4
+   sw $t0, 0($sp)
+
+   lw $t0, n
+   subu $sp, 4
+   sw $t0, 0($sp)
+
+   la $t0, x
+   subu $sp, 4
+   sw $t0, 0($sp)
+
+   la $t0, y
+   subu $sp, 4
+   sw $t0, 0($sp)
+
+   jal procedura
+
+   addi $sp, 8
+
+   lw $t0, x
+   move $a0, $t0
+   li $v0, 1
+   syscall
+
+   la $a0, sep
+   li $v0, 4 
+   syscall
+
+   lw $t0, y
+   move $a0, $t0
+   li $v0, 1
+   syscall
+
+exit:
+    li $v0, 10
+    syscall

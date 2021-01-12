@@ -1,0 +1,130 @@
+#7. Scrieti o functie ce primeste ca parametru prin stiva un intreg n si
+# returneaza $v0=1 sau $v0=0 dupa cum n este par sau impar.
+
+# Scrieti o procedura ce primeste ca parametri prin stiva adresa unui vector
+# de intregi si lungimea sa (intreg) si aplica functia de mai sus pentru
+# fiecare componenta a vectorului; de fiecare data, daca valoarea returnata
+# este 1, va afisa "p", iar daca valoarea returnata este 0, va afisa "i".
+
+# Functia si procedura isi vor accesa parametrii cu $fp iar apelurile vor
+# respecta conventiile MIPS si C (privind cadru  l de apel, $fp, registrii
+# salvati de apelant si apelat, etc.).
+
+# Scrieti un program care apeleaza ultima procedura cu niste
+# parametri fixati.
+.data
+    v:.align 2
+	.word 11, 13, 12, 20, 24, 19
+    n:	.align 2
+	.word 6
+    sep:.align 2
+	.asciiz " "
+    sir1:.align 2
+	.asciiz "p"
+    sir2:.align 2
+	.asciiz "i"
+.text
+paritate:
+    subu $sp,4
+    sw $fp, 0($sp)
+
+    addi $fp, $sp, 4
+
+    subu $sp, 4
+    sw $s0, 0($sp)
+
+    subu $sp, 4
+    sw $s1, 0($sp)
+
+    lw $s0, 0($fp)
+    rem $s1, $s0, 2
+    beqz $s1, este_par
+    li $v0, 1
+    j rest
+este_par:
+    li $v0,0
+rest:
+    lw $s1,-12($fp)
+    lw $s0,-8($fp)
+    lw $fp,-4($fp)
+    addi $sp, 12
+    jr $ra
+
+verificare:
+    subu $sp,4
+    sw $fp, 0($sp)
+
+    addi $fp, $sp, 4
+
+    subu $sp, 4
+    sw $ra, 0($sp)
+
+    subu $sp, 4
+    sw $s0, 0($sp)
+
+    subu $sp, 4
+    sw $s1, 0($sp)
+
+    subu $sp, 4
+    sw $s2, 0($sp)
+
+    subu $sp, 4
+    sw $s3, 0($sp)
+
+    lw $s0, 4($fp)
+    lw $s1, 0($fp)
+
+loop:
+    beqz $s1, restaurare
+    lw $s2, 0($s0)
+
+    subu $sp, 4
+    sw $s2, 0($sp)
+
+    jal paritate
+
+    addi $sp, 4
+
+    move $s3, $v0
+    beqz $s3, afis_par
+    la $a0, sir2
+    li $v0, 4
+    syscall
+    j cont_loop
+afis_par:
+    la $a0, sir1
+    li $v0, 4
+    syscall
+   
+cont_loop:
+    sub $s1, $s1, 1
+    add $s0, $s0, 4
+    j loop
+
+restaurare:
+    lw $s3,-24($fp)
+    lw $s2,-20($fp)
+    lw $s1,-16($fp)
+    lw $s0,-12($fp)
+    lw $ra,-8($fp)
+    lw $fp,-4($fp)
+    addi $sp, 24
+    jr $ra
+    
+main:
+   la $t0, v
+   subu $sp, 4
+   sw $t0, 0($sp)
+
+   lw $t0, n
+   subu $sp, 4
+   sw $t0, 0($sp)
+
+   jal verificare
+
+   addi $sp, 8
+
+   
+exit:
+    li $v0, 10
+    syscall

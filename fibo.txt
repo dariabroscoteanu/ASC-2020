@@ -1,0 +1,83 @@
+.data
+.text
+fibo:
+	subu $sp, 4
+	sw $fp, 0($sp)
+
+	addi $fp, $sp, 4
+
+	subu $sp, 4
+	sw $ra, 0($sp)
+
+	subu $sp, 4
+	sw $s0, 0($sp)
+
+	subu $sp, 4
+	sw $s1, 0($sp)
+
+	lw $s0, 0($fp)
+
+	beq $s0, 1, primul
+
+	beq $s0, 2, doi
+
+	subu $s0, 1
+	
+	subu $sp, 4
+	sw $s0, 0($sp)
+
+	jal fibo
+	addi $sp, 4
+
+	move $s1, $v0
+
+	subu $s0, 1
+	
+	subu $sp, 4
+	sw $s0, 0($sp)
+
+	jal fibo
+	addi $sp, 4
+
+	add $v0, $s1, $v0
+
+	j exit
+
+
+
+
+primul:
+	li $v0, 0
+	j exit
+doi:
+	li $v0, 1
+
+exit:
+	lw $s1, -16($fp)
+	lw $s0, -12($fp)
+	lw $ra, -8($fp)
+	lw $fp, -4($fp)
+
+	addi $sp, 16
+	jr $ra
+
+	
+	
+
+main:
+	li $v0, 5
+	syscall
+	move $t0, $v0
+
+	subu $sp, 4
+	sw $t0, 0($sp)
+
+	jal fibo
+
+	addi $sp, 4
+	move $a0, $v0
+	li $v0, 1
+	syscall
+
+	li $v0, 10
+	syscall

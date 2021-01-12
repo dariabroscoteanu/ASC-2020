@@ -1,0 +1,62 @@
+.data
+.text
+factorial:
+	subu $sp, 4
+	sw $fp, 0($sp)
+
+	addi $fp, $sp, 4
+
+	subu $sp, 4
+	sw $ra, 0($sp)
+
+	subu $sp, 4
+	sw $s0, 0($sp)
+
+	lw $s0, 0($fp)
+	
+	ble $s0, 1, cond
+
+	subu $s0, 1
+
+	subu $sp, 4
+	sw $s0, 0($sp)
+
+	jal factorial
+
+	addi $sp, 4
+
+	addi $s0, 1
+
+	mul $v0, $v0, $s0
+	j exit
+
+cond:
+	li $v0, 1
+exit:
+	lw $s0, -12($fp)
+	lw $ra, -8($fp)
+	lw $fp, -4($fp)
+
+	addi $sp, 12
+	
+	jr $ra
+
+main:
+	li $v0, 5
+	syscall
+	move $t0, $v0
+
+	subu $sp, 4
+	sw $t0, 0($sp)
+
+	jal factorial
+
+	addi $sp, 4
+	
+	move $a0, $v0
+	li $v0, 1
+	syscall
+	
+
+	li $v0, 10
+	syscall

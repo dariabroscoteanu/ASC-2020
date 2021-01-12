@@ -1,0 +1,76 @@
+
+
+.data
+chr:.byte 'b'
+sir:.asciiz "abcdefgt"
+poz:.word 5
+
+.text
+modif:
+subu $sp,4
+sw $fp,0($sp)
+addi $fp,$sp,4
+
+subu $sp,4
+sw $s0,0($sp)
+
+subu $sp,4
+sw $s1,0($sp)
+
+subu $sp,4
+sw $s2,0($sp)
+
+subu $sp,4
+
+lw $s0,0($fp)
+lw $s1,4($fp)
+lw $s2,8($fp)
+
+li $t0,0
+sub $s0,$s0,1
+while:
+
+beq $t0,$s0,exit
+addi $t0,$t0,1
+addu $s2,$s2,1
+j while
+exit:
+sb $s1,0($s2)
+while1:
+beqz $t0 exit2
+addi $t0,-1
+subu $s2,$s2,1
+j while1
+exit2:
+move $v0,$s2
+lw $s2,-16($fp)
+lw $s1,-12($fp)
+lw $s0,-8($fp)
+lw $fp,-4($fp)
+
+addu $sp,16
+jr $ra
+
+
+
+main:
+la $t0,sir
+subu $sp,4
+sw $t0,0($sp)
+
+lb $t0,chr
+subu $sp,4
+sw $t0,0($sp)
+
+lw $t0,poz
+subu $sp,4
+sw $t0,0($sp)
+
+jal modif
+addu $sp,12
+
+move $a0,$v0
+li $v0,4
+syscall
+li $v0,10
+syscall

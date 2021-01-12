@@ -1,0 +1,85 @@
+#III.13) (puncte - vezi in text) (*)
+#a) (1 punct)
+ # Functie MIPS ce implementeaza functia C "strlen" (cu retur prin $v0):
+
+   # size_t strlen(const char *s);
+
+ #care returneaza lungimea stringului pointat de "s", fara a numara
+ #terminatorul nul (putem considera "s" adresa obisnuita iar valoarea
+ #returnata int). 
+ # Program ilustrativ.
+
+
+
+.data
+
+	sirAfis:.asciiz "Lungimea sirului este:"
+	s:.space 400
+	car:.asciiz "\n"
+
+.text
+
+strlen:
+	subu $sp, 4
+	sw $fp, 0($sp)				
+	addi $fp, $sp, 4
+
+	subu $sp, 4
+	sw $s0, 0($sp)
+
+	lw $s0,0($fp)
+	
+	li $t0,0
+	
+for:
+	lb $t1,0($s0)
+
+
+	beqz $t1, exit_for
+
+	addi $t0,1
+	lb $t2,0($s0)
+	addi $s0,1
+	
+	j for
+
+exit_for:
+	beq $t3,$t2,avem_end
+	j final
+avem_end:
+	sub $t0,$t0,1
+	j final
+final:
+	move $v0,$t0
+	lw $s0, -8($fp)
+	lw $fp, -4($fp)
+	
+	jr $ra
+	
+
+main:
+	li $v0, 8 
+	la $a0, s  
+   	li $a1, 20     
+    	move $t0, $a0  
+   	syscall
+	subu $sp,4
+	sw $t0, 0($sp)
+	
+	lb $t3,car
+	jal strlen
+
+	addu $sp,4
+	
+	move $t2,$v0
+
+	la $a0,sirAfis
+	li $v0,4
+	syscall
+
+	move $a0, $t2
+	li $v0,1
+	syscall
+
+	li $v0,10
+	syscall
